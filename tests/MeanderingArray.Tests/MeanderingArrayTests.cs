@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FluentAssertions;
 using MeanderingArray.ConsoleApp;
 using Xunit;
 
@@ -31,9 +32,13 @@ namespace MeanderingArray.Tests
             List<int> actual = Result.MeanderingArray(unsorted);
 
             // Assert
-            Assert.NotNull(actual);
-            Assert.Equal(expected.Count, actual.Count);
-            Assert.Equal(expected, actual);
+            actual
+                .Should()
+                .NotBeNull()
+                .And
+                .HaveCount(expected.Count)
+                .And
+                .Equal(expected);
         }
     }
 }
