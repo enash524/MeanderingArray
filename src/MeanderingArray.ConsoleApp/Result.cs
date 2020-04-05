@@ -1,12 +1,37 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace MeanderingArray.ConsoleApp
 {
-    public static class Result
+    public class Result : IResult
     {
-        public static List<int> MeanderingArray(List<int> unsorted)
+        private readonly ILogger<Result> _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Result`1"/> class.
+        /// </summary>
+        /// <param name="logger">DI injected logger</param>
+        public Result(ILogger<Result> logger)
         {
+            _logger = logger;
+        }
+
+        public List<int> MeanderingArray(List<int> unsorted)
+        {
+            if (unsorted == null)
+            {
+                _logger.LogError($"Collection cannot be null {nameof(unsorted)}");
+                throw new ArgumentNullException(nameof(unsorted), "Collection cannot be null");
+            }
+
+            if (unsorted.Count == 0)
+            {
+                _logger.LogError($"Collection cannot be empty {nameof(unsorted)}");
+                throw new ArgumentException("Collection cannot be empty", nameof(unsorted));
+            }
+
             List<int> result = new List<int>();
 
             unsorted.Sort();

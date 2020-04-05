@@ -1,12 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using MeanderingArray.ConsoleApp;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace MeanderingArray.Tests
 {
     public class MeanderingArrayTests
     {
+        private readonly Mock<ILogger<Result>> _logger;
+        private readonly IResult _result;
+
+        public MeanderingArrayTests()
+        {
+            _logger = new Mock<ILogger<Result>>();
+            _result = new Result(_logger.Object);
+        }
+
         public static IEnumerable<object[]> MeanderingArrayTestData =>
             new List<object[]>
             {
@@ -22,6 +34,37 @@ namespace MeanderingArray.Tests
                 }
             };
 
+        [Fact]
+        public void MeanderingArray_EmptyInput_Test()
+        {
+            // Arrange
+            List<int> unsorted = new List<int>();
+
+            // Act
+            Action actual = () => _result.MeanderingArray(unsorted);
+
+            // Assert
+            actual
+                .Should()
+                .Throw<ArgumentException>()
+                .WithMessage("Collection cannot be empty (Parameter 'unsorted')");
+        }
+
+        [Fact]
+        public void MeanderingArray_NullInput_Test()
+        {
+            // Arrange
+
+            // Act
+            Action actual = () => _result.MeanderingArray(null);
+
+            // Assert
+            actual
+                .Should()
+                .Throw<ArgumentNullException>()
+                .WithMessage("Collection cannot be null (Parameter 'unsorted')");
+        }
+
         [Theory]
         [MemberData(nameof(MeanderingArrayTestData))]
         public void MeanderingArrayTest(List<int> unsorted, List<int> expected)
@@ -29,7 +72,7 @@ namespace MeanderingArray.Tests
             // Arrange
 
             // Act
-            List<int> actual = Result.MeanderingArray(unsorted);
+            List<int> actual = _result.MeanderingArray(unsorted);
 
             // Assert
             actual
