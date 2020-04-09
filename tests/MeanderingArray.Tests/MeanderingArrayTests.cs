@@ -38,6 +38,7 @@ namespace MeanderingArray.Tests
         public void MeanderingArray_EmptyInput_Test()
         {
             // Arrange
+            const string expected = "Collection cannot be empty (Parameter 'unsorted')";
             List<int> unsorted = new List<int>();
 
             // Act
@@ -47,13 +48,30 @@ namespace MeanderingArray.Tests
             actual
                 .Should()
                 .Throw<ArgumentException>()
-                .WithMessage("Collection cannot be empty (Parameter 'unsorted')");
+                .WithMessage(expected);
+
+            _logger.Invocations.Count
+                .Should()
+                .Be(1);
+
+            _logger.Invocations[0].Arguments[0]
+                .Should()
+                .Be(LogLevel.Error);
+
+            _logger
+                .Verify(x => x.Log(LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((x, t) => string.Equals(x.ToString(), expected)),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                    Times.Once());
         }
 
         [Fact]
         public void MeanderingArray_NullInput_Test()
         {
             // Arrange
+            const string expected = "Collection cannot be null (Parameter 'unsorted')";
 
             // Act
             Action actual = () => _result.MeanderingArray(null);
@@ -62,7 +80,23 @@ namespace MeanderingArray.Tests
             actual
                 .Should()
                 .Throw<ArgumentNullException>()
-                .WithMessage("Collection cannot be null (Parameter 'unsorted')");
+                .WithMessage(expected);
+
+            _logger.Invocations.Count
+                .Should()
+                .Be(1);
+
+            _logger.Invocations[0].Arguments[0]
+                .Should()
+                .Be(LogLevel.Error);
+
+            _logger
+                .Verify(x => x.Log(LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((x, t) => string.Equals(x.ToString(), expected)),
+                    It.IsAny<Exception>(),
+                    It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+                    Times.Once());
         }
 
         [Theory]

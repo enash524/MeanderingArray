@@ -22,13 +22,13 @@ namespace MeanderingArray.ConsoleApp
         {
             if (unsorted == null)
             {
-                _logger.LogError($"Collection cannot be null {nameof(unsorted)}");
+                _logger.LogError($"Collection cannot be null (Parameter '{nameof(unsorted)}')");
                 throw new ArgumentNullException(nameof(unsorted), "Collection cannot be null");
             }
 
             if (unsorted.Count == 0)
             {
-                _logger.LogError($"Collection cannot be empty {nameof(unsorted)}");
+                _logger.LogError($"Collection cannot be empty (Parameter '{nameof(unsorted)}')");
                 throw new ArgumentException("Collection cannot be empty", nameof(unsorted));
             }
 
